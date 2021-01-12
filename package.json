@@ -1,0 +1,130 @@
+{
+    "name": "@tinkoff/navigation-skeleton",
+    "version": "1.0.3",
+    "description": "Navigation skeleton is a component for showing skeletons during navigation process",
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve",
+        "demo": "ng serve demo",
+        "dev:ssr": "ng run demo:serve-ssr",
+        "build:ssr": "ng build --prod && ng run demo:server:production",
+        "prerender": "ng run demo:prerender",
+        "build": "ng build",
+        "build:schematics": "tsc -p tsconfig.schematics.json",
+        "serve:prerender": "cd dist/demo/browser && http-server",
+        "compile:server": "tsc -p ./projects/demo/tsconfig.ssr.json",
+        "generate:prerender": "node dist/demo/ssr/prerender",
+        "test": "ng test --code-coverage=true",
+        "preadd": "npm run build:schematics",
+        "add": "schematics ./schematics/collection.json:library-starter --debug=false",
+        "postadd": "git add ./projects",
+        "lint": "ng lint",
+        "lint:less": "stylelint '**/*.less'",
+        "typecheck": "tsc --noEmit --skipLibCheck",
+        "release": "standard-version",
+        "release:patch": "npm run release -- --release-as patch",
+        "release:minor": "npm run release -- --release-as minor",
+        "release:major": "npm run release -- --release-as major",
+        "publish": "npm run build:all && npm run publish:all",
+        "build:all": "npm run build:navigation-skeleton",
+        "publish:all": "npm run publish:navigation-skeleton",
+        "build:navigation-skeleton": "ng run navigation-skeleton:build && npm run copy-readme-to:navigation-skeleton",
+        "test:navigation-skeleton": "ng run navigation-skeleton:test",
+        "test:navigation-skeleton:watch": "ng run navigation-skeleton:test --watch=true",
+        "publish:navigation-skeleton": "npm publish ./dist/navigation-skeleton",
+        "copy-readme-to:navigation-skeleton": "node scripts/copyReadme.js"
+    },
+    "keywords": [
+        "angular",
+        "ng",
+        "navigation",
+        "skeleton",
+        "perfomance",
+        "router",
+        "tinkoff"
+    ],
+    "license": "Apache-2.0",
+    "author": {
+        "name": "Oleg Teterin",
+        "email": "dersizes@dersizes.ru"
+    },
+    "repository": "https://github.com/TinkoffCreditSystems/navigation-skeleton",
+    "bugs": "https://github.com/TinkoffCreditSystems/navigation-skeleton/issues",
+    "homepage": "https://github.com/TinkoffCreditSystems/navigation-skeleton#README",
+    "schematics": "./schematics/collection.json",
+    "dependencies": {
+        "@angular/animations": "^9.1.13",
+        "@angular/common": "^9.1.13",
+        "@angular/compiler": "^9.1.13",
+        "@angular/core": "^9.1.13",
+        "@angular/forms": "^9.1.13",
+        "@angular/platform-browser": "^9.1.13",
+        "@angular/platform-browser-dynamic": "^9.1.13",
+        "@angular/platform-server": "^9.1.13",
+        "@angular/router": "^9.1.13",
+        "@nguniversal/express-engine": "^9.1.1",
+        "@ng-web-apis/common": "^1.9.0",
+        "@ng-web-apis/universal": "^1.9.2",
+        "core-js": "^2.6.9",
+        "express": "^4.15.2",
+        "rxjs": "~6.6.3",
+        "tslib": "^1.10.0",
+        "zone.js": "~0.10.2"
+    },
+    "devDependencies": {
+        "@angular-devkit/build-angular": "~0.901.13",
+        "@angular-devkit/build-ng-packagr": "~0.901.13",
+        "@angular-devkit/core": "^9.1.13",
+        "@angular-devkit/schematics": "^9.1.13",
+        "@angular-devkit/schematics-cli": "~0.901.13",
+        "@angular/cli": "^9.1.13",
+        "@angular/compiler-cli": "^9.1.13",
+        "@angular/language-service": "^9.1.13",
+        "@commitlint/cli": "^11.0.0",
+        "@commitlint/config-conventional": "^11.0.0",
+        "@nguniversal/builders": "^9.1.1",
+        "@tinkoff/linters": "^0.6.0",
+        "@types/express": "^4.17.0",
+        "@types/jasmine": "^3.6.2",
+        "@types/jasminewd2": "^2.0.8",
+        "@types/node": "12.19.9",
+        "coveralls": "^3.1.0",
+        "husky": "^4.3.6",
+        "jasmine-core": "^3.6.0",
+        "jasmine-spec-reporter": "^6.0.0",
+        "karma": "^5.2.3",
+        "karma-chrome-launcher": "^3.1.0",
+        "karma-coverage-istanbul-reporter": "^3.0.3",
+        "karma-jasmine": "^4.0.1",
+        "karma-jasmine-html-reporter": "^1.5.4",
+        "lint-staged": "^10.5.3",
+        "ng-packagr": "9.1.5",
+        "prettier": "^2.2.1",
+        "standard-version": "^9.0.0",
+        "stylelint": "^10.0.1",
+        "ts-node": "^9.1.1",
+        "tslint": "~5.15.0",
+        "tsutils": "^3.17.1",
+        "typescript": "~3.8.3",
+        "ts-mockito": "^2.4.2"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+            "pre-commit": "lint-staged && npm run typecheck"
+        }
+    },
+    "lint-staged": {
+        "*.{js,ts,html,md,less,json}": ["prettier --write", "git add"],
+        "*.ts": "tslint --fix"
+    },
+    "standard-version": {
+        "scripts": {
+            "postbump": "node scripts/syncVersions.js && git add **/package.json"
+        }
+    },
+    "engines": {
+        "node": ">= 10",
+        "npm": ">= 3"
+    }
+}

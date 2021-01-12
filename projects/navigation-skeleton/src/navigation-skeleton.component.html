@@ -1,0 +1,9 @@
+<div @triggerChildAnimation *ngIf="skeleton | async as config; else content">
+    <ng-container
+        *ngComponentOutlet="config.component; injector: config.injector"
+    ></ng-container>
+</div>
+
+<ng-template #content>
+    <ng-content></ng-content>
+</ng-template>
