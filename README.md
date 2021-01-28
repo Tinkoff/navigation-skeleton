@@ -21,6 +21,7 @@ $ npm install @tinkoff/navigation-skeleton
        ...
        imports: [
            ...
+           BrowserAnimationsModule,
            RouterModule.forRoot(...),
            NavigationSkeletonModule,
        ],
@@ -46,3 +47,7 @@ $ npm install @tinkoff/navigation-skeleton
        },
     };
     ```
+
+## Demo
+
+[https://stackblitz.com/edit/tcs-navigation-skeleton](https://stackblitz.com/edit/tcs-navigation-skeleton?file=app%2Fuser%2Fuser.component.ts)
