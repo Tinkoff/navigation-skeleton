@@ -1,7 +1,6 @@
 import {LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NavigationSkeletonModule} from '@tinkoff/navigation-skeleton';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app.routes';
@@ -11,7 +10,6 @@ import {TwoComponent} from './two/two.component';
 @NgModule({
     bootstrap: [AppComponent],
     imports: [
-        BrowserAnimationsModule,
         BrowserModule.withServerTransition({
             appId: 'demo',
         }),

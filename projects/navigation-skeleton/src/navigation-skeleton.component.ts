@@ -2,10 +2,13 @@ import {animateChild, query, transition, trigger} from '@angular/animations';
 import {
     ChangeDetectionStrategy,
     Component,
+    Inject,
     Injector,
     NgModuleRef,
+    Optional,
     Type,
 } from '@angular/core';
+import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 import {
     GuardsCheckStart,
     NavigationCancel,
@@ -41,7 +44,12 @@ export interface NavigationSkeletonRoute extends Route {
 export class NavigationSkeletonComponent {
     readonly skeleton: Observable<NavigationSkeleton | null>;
 
-    constructor(router: Router) {
+    constructor(
+        router: Router,
+        @Inject(ANIMATION_MODULE_TYPE)
+        @Optional()
+        public readonly animations?: 'NoopAnimations' | 'BrowserAnimations' | null,
+    ) {
         const start = router.events.pipe(
             filter(event => event instanceof GuardsCheckStart),
         );

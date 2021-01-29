@@ -1,8 +1,18 @@
-<div @triggerChildAnimation *ngIf="skeleton | async as config; else content">
-    <ng-container
-        *ngComponentOutlet="config.component; injector: config.injector"
-    ></ng-container>
-</div>
+<ng-container *ngIf="animations; else noAnimations">
+    <div @triggerChildAnimation *ngIf="skeleton | async as config; else content">
+        <ng-container
+            *ngComponentOutlet="config.component; injector: config.injector"
+        ></ng-container>
+    </div>
+</ng-container>
+
+<ng-template #noAnimations>
+    <div *ngIf="skeleton | async as config; else content">
+        <ng-container
+            *ngComponentOutlet="config.component; injector: config.injector"
+        ></ng-container>
+    </div>
+</ng-template>
 
 <ng-template #content>
     <ng-content></ng-content>

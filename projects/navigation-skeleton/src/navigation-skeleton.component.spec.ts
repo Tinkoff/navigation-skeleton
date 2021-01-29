@@ -1,7 +1,17 @@
 import {CommonModule} from '@angular/common';
-import {Component, Inject, Injectable, InjectionToken, NgModule} from '@angular/core';
+import {
+    Component,
+    Inject,
+    Injectable,
+    InjectionToken,
+    NgModule,
+    NgZone,
+} from '@angular/core';
 import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {
+    ANIMATION_MODULE_TYPE,
+    BrowserAnimationsModule,
+} from '@angular/platform-browser/animations';
 import {CanActivate, Resolve, Router, RouterModule} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NEVER, Observable, Subject, timer} from 'rxjs';
@@ -96,13 +106,14 @@ class TestSkeletonLazyComponent {
 })
 export class TestSkeletonLazyModule {}
 
-describe('NavigationSkeletonService | Сервис для регистрации скелетон компонентов в реестре', () => {
+describe('NavigationSkeletonComponent | Компонент для показа скелетонов во время навигации', () => {
     let resolveMock: Resolve<any>;
     let canActivateMock: CanActivate;
 
     let routes: NavigationSkeletonRoute[] = [];
 
     let router: Router;
+    let ngZone: NgZone;
     let fixture: ComponentFixture<TestRoutingComponent>;
 
     beforeEach(() => {
@@ -151,7 +162,7 @@ describe('NavigationSkeletonService | Сервис для регистрации
             imports: [
                 CommonModule,
                 RouterTestingModule.withRoutes(routes),
-                NoopAnimationsModule,
+                BrowserAnimationsModule,
             ],
             declarations: [
                 TestRoutingComponent,
@@ -174,12 +185,13 @@ describe('NavigationSkeletonService | Сервис для регистрации
         });
     });
 
-    beforeEach(() => {
+    function setupComponent() {
         fixture = TestBed.createComponent(TestRoutingComponent);
-        router = TestBed.get(Router);
+        router = TestBed.inject(Router);
+        ngZone = TestBed.inject(NgZone);
 
         fixture.detectChanges();
-    });
+    }
 
     describe('Если у целевого роута есть скелетон компонент', () => {
         it('Скелетон компонент должен браться из целевого роута', fakeAsync(() => {
@@ -187,7 +199,8 @@ describe('NavigationSkeletonService | Сервис для регистрации
             when(canActivateMock.canActivate(anything(), anything())).thenReturn(NEVER);
 
             // act
-            router.navigateByUrl('/3/2');
+            setupComponent();
+            ngZone.run(() => router.navigateByUrl('/3/2'));
             tick();
             fixture.detectChanges();
 
@@ -206,12 +219,13 @@ describe('NavigationSkeletonService | Сервис для регистрации
             );
 
             // act
-            router.navigateByUrl('/3/2');
+            setupComponent();
+            ngZone.run(() => router.navigateByUrl('/3/2'));
             tick();
             canActivate.next(true);
             fixture.detectChanges();
 
-            router.navigateByUrl('/5/2');
+            ngZone.run(() => router.navigateByUrl('/5/2'));
             tick();
             fixture.detectChanges();
 
@@ -226,7 +240,8 @@ describe('NavigationSkeletonService | Сервис для регистрации
             when(canActivateMock.canActivate(anything(), anything())).thenReturn(NEVER);
 
             // act
-            router.navigateByUrl('/1');
+            setupComponent();
+            ngZone.run(() => router.navigateByUrl('/1'));
             tick();
             fixture.detectChanges();
 
@@ -241,7 +256,8 @@ describe('NavigationSkeletonService | Сервис для регистрации
             when(canActivateMock.canActivate(anything(), anything())).thenReturn(true);
 
             // act
-            router.navigateByUrl('/1');
+            setupComponent();
+            ngZone.run(() => router.navigateByUrl('/1'));
             tick();
             fixture.detectChanges();
 
@@ -256,7 +272,8 @@ describe('NavigationSkeletonService | Сервис для регистрации
             when(resolveMock.resolve(anything(), anything())).thenReturn(NEVER);
 
             // act
-            router.navigateByUrl('/2');
+            setupComponent();
+            ngZone.run(() => router.navigateByUrl('/2'));
             tick();
             fixture.detectChanges();
 
@@ -271,7 +288,8 @@ describe('NavigationSkeletonService | Сервис для регистрации
             when(resolveMock.resolve(anything(), anything())).thenReturn('data');
 
             // act
-            router.navigateByUrl('/2');
+            setupComponent();
+            ngZone.run(() => router.navigateByUrl('/2'));
             tick();
             fixture.detectChanges();
 
@@ -287,11 +305,50 @@ describe('NavigationSkeletonService | Сервис для регистрации
         when(canActivateMock.canActivate(anything(), anything())).thenReturn(NEVER);
 
         // act
-        router.navigateByUrl('/4');
+        setupComponent();
+        ngZone.run(() => router.navigateByUrl('/4'));
         tick();
         fixture.detectChanges();
 
         // assert
         expect(fixture.debugElement.nativeElement.textContent).toBe('projected-content');
+    }));
+
+    it('Если анимации включены, то компонент работает с ними', fakeAsync(() => {
+        // arrange
+        when(resolveMock.resolve(anything(), anything())).thenReturn(NEVER);
+        TestBed.overrideProvider(ANIMATION_MODULE_TYPE, {useValue: 'BrowserAnimations'});
+
+        // act
+        setupComponent();
+        ngZone.run(() => router.navigateByUrl('/2'));
+        tick();
+        fixture.detectChanges();
+
+        // assert
+        expect(
+            fixture.debugElement.query(
+                element => element.classes['ng-trigger-triggerChildAnimation'],
+            ),
+        ).toBeTruthy();
+    }));
+
+    it('Если анимации выключены, то компонент не работает с ними', fakeAsync(() => {
+        // arrange
+        when(resolveMock.resolve(anything(), anything())).thenReturn(NEVER);
+        TestBed.overrideProvider(ANIMATION_MODULE_TYPE, {useValue: null});
+
+        // act
+        setupComponent();
+        ngZone.run(() => router.navigateByUrl('/2'));
+        tick();
+        fixture.detectChanges();
+
+        // assert
+        expect(
+            fixture.debugElement.query(
+                element => element.classes['ng-trigger-triggerChildAnimation'],
+            ),
+        ).toBeFalsy();
     }));
 });

@@ -21,7 +21,6 @@ $ npm install @tinkoff/navigation-skeleton
        ...
        imports: [
            ...
-           BrowserAnimationsModule,
            RouterModule.forRoot(...),
            NavigationSkeletonModule,
        ],
