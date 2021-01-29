@@ -106,7 +106,7 @@ class TestSkeletonLazyComponent {
 })
 export class TestSkeletonLazyModule {}
 
-describe('NavigationSkeletonComponent | Компонент для показа скелетонов во время навигации', () => {
+describe('NavigationSkeletonComponent | This component allows you to show skeletons of pages during navigation process', () => {
     let resolveMock: Resolve<any>;
     let canActivateMock: CanActivate;
 
@@ -193,8 +193,8 @@ describe('NavigationSkeletonComponent | Компонент для показа �
         fixture.detectChanges();
     }
 
-    describe('Если у целевого роута есть скелетон компонент', () => {
-        it('Скелетон компонент должен браться из целевого роута', fakeAsync(() => {
+    describe('When target route has a skeleton component', () => {
+        it('Skeleton component must be taken from target route', fakeAsync(() => {
             // arrange
             when(canActivateMock.canActivate(anything(), anything())).thenReturn(NEVER);
 
@@ -210,7 +210,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
             );
         }));
 
-        it('Скелетон компонент можно переиспользовать', fakeAsync(() => {
+        it('Skeleton component can be reused', fakeAsync(() => {
             // arrange
             const canActivate = new Subject<boolean>();
 
@@ -235,7 +235,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
             );
         }));
 
-        it('В процессе активация роута, показывается скелетон компонент роута', fakeAsync(() => {
+        it('In the process of route activating, skeleton component of target route is shown', fakeAsync(() => {
             // arrange
             when(canActivateMock.canActivate(anything(), anything())).thenReturn(NEVER);
 
@@ -251,7 +251,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
             );
         }));
 
-        it('После активации роута, показывается переданный контент', fakeAsync(() => {
+        it('After route is activated, projected content is shown', fakeAsync(() => {
             // arrange
             when(canActivateMock.canActivate(anything(), anything())).thenReturn(true);
 
@@ -267,7 +267,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
             );
         }));
 
-        it('В процессе резолва данных роута, показывается скелетон компонент роута', fakeAsync(() => {
+        it('In the process of route data resolving, skeleton component of target route is shown', fakeAsync(() => {
             // arrange
             when(resolveMock.resolve(anything(), anything())).thenReturn(NEVER);
 
@@ -283,7 +283,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
             );
         }));
 
-        it('После резолва данных роута, показывается переданный контент', fakeAsync(() => {
+        it('After resolving route data, projected content is shown', fakeAsync(() => {
             // arrange
             when(resolveMock.resolve(anything(), anything())).thenReturn('data');
 
@@ -300,7 +300,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
         }));
     });
 
-    it('Если у целевого роута нет скелетон компонента, то показывается переданный контент', fakeAsync(() => {
+    it('When target route does not have a skeleton component - projected content is shown', fakeAsync(() => {
         // arrange
         when(canActivateMock.canActivate(anything(), anything())).thenReturn(NEVER);
 
@@ -314,7 +314,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
         expect(fixture.debugElement.nativeElement.textContent).toBe('projected-content');
     }));
 
-    it('Если анимации включены, то компонент работает с ними', fakeAsync(() => {
+    it('When animations are enabled - component works with them', fakeAsync(() => {
         // arrange
         when(resolveMock.resolve(anything(), anything())).thenReturn(NEVER);
         TestBed.overrideProvider(ANIMATION_MODULE_TYPE, {useValue: 'BrowserAnimations'});
@@ -333,7 +333,7 @@ describe('NavigationSkeletonComponent | Компонент для показа �
         ).toBeTruthy();
     }));
 
-    it('Если анимации выключены, то компонент не работает с ними', fakeAsync(() => {
+    it('When animations are off - component does not work with them', fakeAsync(() => {
         // arrange
         when(resolveMock.resolve(anything(), anything())).thenReturn(NEVER);
         TestBed.overrideProvider(ANIMATION_MODULE_TYPE, {useValue: null});

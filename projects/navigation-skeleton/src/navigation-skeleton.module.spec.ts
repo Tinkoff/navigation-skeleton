@@ -11,7 +11,7 @@ describe('NavigationSkeletonRootModule', () => {
         });
     });
 
-    it('Должен экспортировать компонент для показа скелетонов', () => {
+    it('Should export the component that is used to display navigation skeletons', () => {
         // assert
         expect(TestBed.createComponent(NavigationSkeletonComponent)).toBeDefined();
     });
