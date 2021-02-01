@@ -48,7 +48,7 @@ export class NavigationSkeletonComponent {
         router: Router,
         @Inject(ANIMATION_MODULE_TYPE)
         @Optional()
-        public readonly animations?: 'NoopAnimations' | 'BrowserAnimations' | null,
+        public readonly animations?: string | null,
     ) {
         const start = router.events.pipe(
             filter(event => event instanceof GuardsCheckStart),
