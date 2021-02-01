@@ -1,6 +1,6 @@
 {
     "name": "@tinkoff/navigation-skeleton",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Navigation skeleton is a component for showing skeletons during navigation process",
     "scripts": {
         "ng": "ng",
